@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        swipeRefresh.isRefreshing = true
         loadBooks()
     }
 
@@ -29,6 +28,5 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, it.title, Toast.LENGTH_SHORT).show()
         }
         recyclerView.adapter = adapter
-        swipeRefresh.isRefreshing = false
     }
 }
