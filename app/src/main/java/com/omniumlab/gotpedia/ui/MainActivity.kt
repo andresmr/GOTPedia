@@ -1,10 +1,13 @@
-package com.omniumlab.gotpedia
+package com.omniumlab.gotpedia.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import com.omniumlab.gotpedia.R
+import com.omniumlab.gotpedia.data.books
+import com.omniumlab.gotpedia.data.charactersByBook
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 
