@@ -1,4 +1,4 @@
-package com.omniumlab.gotpedia.entities
+package com.omniumlab.gotpedia.domain
 
 data class Character(val name: String) {
     override fun toString(): String {
