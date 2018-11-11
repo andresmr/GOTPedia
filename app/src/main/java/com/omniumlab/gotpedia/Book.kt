@@ -1,3 +1,3 @@
 package com.omniumlab.gotpedia
 
-data class Book(val title: String, val isbn: String, val pages: Int, val charactersPOV: List<String>)
+data class Book(val title: String, val isbn: String, val pages: Int)

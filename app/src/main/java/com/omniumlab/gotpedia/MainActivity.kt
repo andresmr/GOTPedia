@@ -20,7 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadBooks() {
         val adapter = BookListAdapter(books) {
-            alert(it.charactersPOV.toString()) {
+            val characters = charactersByBook[it.title]
+            alert(characters.toString()) {
                 title = it.title
             }.show()
         }
