@@ -1,19 +1,25 @@
 package com.omniumlab.gotpedia.presenter
 
-import com.omniumlab.gotpedia.data.books
-import com.omniumlab.gotpedia.data.charactersByBook
-import com.omniumlab.gotpedia.domain.Book
+import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.interactor.GetBookListInteractor
+import com.omniumlab.gotpedia.domain.interactor.GetCharactersPOVByBookInteractor
 
 class BookListPresenter(private val view: View) {
 
+    private val getBookListInteractor = GetBookListInteractor()
+    private val getCharactersPOVByBookInteractor = GetCharactersPOVByBookInteractor()
+
     init {
         view.showLoading()
+        val books = getBookListInteractor.execute()
         view.showBookList(books)
         view.hideLoading()
     }
 
     fun onBookClick(bookTitle: String) {
-        view.showPOVCharacters(bookTitle, charactersByBook[bookTitle].toString())
+        getCharactersPOVByBookInteractor.execute(bookTitle).let {
+            view.showPOVCharacters(bookTitle, it.toString())
+        }
     }
 
     interface View {

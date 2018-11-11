@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.omniumlab.gotpedia.R
-import com.omniumlab.gotpedia.domain.Book
+import com.omniumlab.gotpedia.domain.entity.Book
 import kotlinx.android.synthetic.main.item_book.view.*
 
 class BookListAdapter(private val books: List<Book>, private val listener: (Book) -> Unit) :

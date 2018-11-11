@@ -1,7 +1,7 @@
 package com.omniumlab.gotpedia.data
 
-import com.omniumlab.gotpedia.domain.Book
-import com.omniumlab.gotpedia.domain.Character
+import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.entity.Character
 
 val books = listOf(
     Book("Juego de Tronos", "123456A", 578),

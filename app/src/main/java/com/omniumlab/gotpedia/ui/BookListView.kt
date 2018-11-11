@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.omniumlab.gotpedia.R
-import com.omniumlab.gotpedia.domain.Book
+import com.omniumlab.gotpedia.domain.entity.Book
 import com.omniumlab.gotpedia.presenter.BookListPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
