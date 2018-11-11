@@ -6,29 +6,40 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.omniumlab.gotpedia.R
-import com.omniumlab.gotpedia.data.books
-import com.omniumlab.gotpedia.data.charactersByBook
+import com.omniumlab.gotpedia.domain.Book
+import com.omniumlab.gotpedia.presenter.BookListPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 
-class MainActivity : AppCompatActivity() {
+class BookListView : AppCompatActivity(), BookListPresenter.View {
+
+    private lateinit var presenter: BookListPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        progressBar.visibility = VISIBLE
-        loadBooks()
+        presenter = BookListPresenter(this)
     }
 
-    private fun loadBooks() {
+    override fun showLoading() {
+        progressBar.visibility = VISIBLE
+    }
+
+    override fun hideLoading() {
+        progressBar.visibility = GONE
+    }
+
+    override fun showBookList(books: List<Book>) {
         val adapter = BookListAdapter(books) {
-            val characters = charactersByBook[it.title]
-            alert(characters.toString()) {
-                title = it.title
-            }.show()
+            presenter.onBookClick(it.title)
         }
         recyclerView.adapter = adapter
-        progressBar.visibility = GONE
+    }
+
+    override fun showPOVCharacters(bookTitle: String, characters: String) {
+        alert(characters) {
+            title = bookTitle
+        }.show()
     }
 }
