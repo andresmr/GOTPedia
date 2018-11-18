@@ -1,25 +1,30 @@
 package com.omniumlab.gotpedia.data
 
-import com.omniumlab.gotpedia.data.dto.BookDTO
 import com.omniumlab.gotpedia.data.mapper.BooksMapper
 import com.omniumlab.gotpedia.domain.entity.Character
 import com.omniumlab.gotpedia.domain.repository.BooksRepository
 import com.omniumlab.gotpedia.domain.repository.BooksRepositoryListener
 import com.omniumlab.gotpedia.domain.repository.CharacterRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RepositoryImpl : BooksRepository, CharacterRepository {
 
+    private val service: IceAndFireService = IceAndFireService.Factory.makeRetrofitService()
     private val booksMapper = BooksMapper()
 
     override fun obtain(listener: BooksRepositoryListener) {
-        val booksDTO = listOf(
-            BookDTO("Juego de Tronos", "123456A", 578),
-            BookDTO("Choque de Reyes", "123456B", 498),
-            BookDTO("Tormenta de espadas", "123456C", 700),
-            BookDTO("Festín de cuervos", "123456D", 987),
-            BookDTO("Baile con dragones", "123456E", 682)
-        )
-        listener.onComplete(booksMapper.map(booksDTO))
+
+        GlobalScope.launch(Dispatchers.Main) {
+            val request = service.listBooks()
+            val response = request.await()
+            if (response.isSuccessful) {
+                response.body()?.let { listener.onComplete(booksMapper.map(it)) }
+            } else {
+                listener.onError()
+            }
+        }
     }
 
     override fun retrieveCharactersByBookPOV(title: String): List<Character>? {
