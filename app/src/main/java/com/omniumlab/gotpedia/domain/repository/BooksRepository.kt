@@ -1,5 +1,7 @@
 package com.omniumlab.gotpedia.domain.repository
 
+import com.omniumlab.gotpedia.domain.entity.Book
+
 interface BooksRepository {
-    fun obtain(listener: BooksRepositoryListener)
+    suspend fun obtain() : List<Book>
 }

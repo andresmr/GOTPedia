@@ -11,16 +11,11 @@ class BookListPresenter(private val view: View) {
 
     init {
         view.showLoading()
-        getBookListInteractor.execute(object : GetBookListInteractor.Callback {
-            override fun onSuccess(books: List<Book>) {
-                view.showBookList(books)
-                view.hideLoading()
-            }
+        getBookListInteractor.execute({ books ->
+            view.showBookList(books)
+            view.hideLoading()
+        }, { view.hideLoading() })
 
-            override fun onError() {
-                view.hideLoading()
-            }
-        })
     }
 
     fun onBookClick(bookTitle: String) {
