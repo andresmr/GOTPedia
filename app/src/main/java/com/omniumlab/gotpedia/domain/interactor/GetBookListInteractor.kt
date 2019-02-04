@@ -5,7 +5,7 @@ import com.omniumlab.gotpedia.domain.entity.Book
 import com.omniumlab.gotpedia.domain.repository.BooksRepository
 import kotlinx.coroutines.*
 
-class GetBookListInteractor {
+class GetBookListInteractor(private val dispatcher: CoroutineDispatcher) {
 
     private val booksRepository: BooksRepository = RepositoryImpl()
 
@@ -14,7 +14,7 @@ class GetBookListInteractor {
         error: () -> Unit
     ) {
         val deferred = GlobalScope.async { booksRepository.obtain() }
-        GlobalScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(dispatcher) {
             val books = deferred.await()
             if (books.isEmpty()) {
                 error()

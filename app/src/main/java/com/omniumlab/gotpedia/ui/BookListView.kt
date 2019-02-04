@@ -7,8 +7,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.omniumlab.gotpedia.R
 import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.interactor.GetBookListInteractor
 import com.omniumlab.gotpedia.presenter.BookListPresenter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.anko.alert
 
 class BookListView : AppCompatActivity(), BookListPresenter.View {
@@ -19,7 +21,8 @@ class BookListView : AppCompatActivity(), BookListPresenter.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        presenter = BookListPresenter(this)
+        presenter = BookListPresenter(this, GetBookListInteractor(Dispatchers.Main))
+        presenter.loadBooks()
     }
 
     override fun showLoading() {
