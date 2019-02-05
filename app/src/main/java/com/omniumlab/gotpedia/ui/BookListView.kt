@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import com.omniumlab.gotpedia.R
+import com.omniumlab.gotpedia.data.RepositoryImpl
 import com.omniumlab.gotpedia.domain.entity.Book
 import com.omniumlab.gotpedia.domain.interactor.GetBookListInteractor
 import com.omniumlab.gotpedia.presenter.BookListPresenter
@@ -21,7 +22,7 @@ class BookListView : AppCompatActivity(), BookListPresenter.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        presenter = BookListPresenter(this, GetBookListInteractor(Dispatchers.Main))
+        presenter = BookListPresenter(this, GetBookListInteractor(Dispatchers.Main, RepositoryImpl()))
         presenter.loadBooks()
     }
 
