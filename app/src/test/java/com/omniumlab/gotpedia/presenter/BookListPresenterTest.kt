@@ -13,7 +13,7 @@ class BookListPresenterTest {
     private lateinit var presenter: BookListPresenter
 
     private val success = argumentCaptor<(List<Book>) -> Unit>()
-    private val error = argumentCaptor<() -> Unit>()
+    private val error = argumentCaptor<(String) -> Unit>()
 
     @Before
     fun setUp() {
@@ -35,7 +35,7 @@ class BookListPresenterTest {
         presenter.loadBooks()
 
         verify(getBookListInteractor).execute(any(), error.capture())
-        error.lastValue.invoke()
+        error.lastValue.invoke(any())
 
         verify(view, never()).showBookList(any())
     }

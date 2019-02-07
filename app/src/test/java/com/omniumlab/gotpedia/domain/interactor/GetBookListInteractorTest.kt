@@ -2,6 +2,7 @@ package com.omniumlab.gotpedia.domain.interactor
 
 import com.nhaarman.mockitokotlin2.*
 import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.entity.Result
 import com.omniumlab.gotpedia.domain.repository.BooksRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,14 +14,15 @@ import org.junit.Test
 class GetBookListInteractorTest {
 
     private val booksRepository: BooksRepository = mock()
+    private val books: Result<List<Book>> = mock()
     private lateinit var interactor: GetBookListInteractor
 
     private val lambda1: (List<Book>) -> Unit = mock {
         on { invoke(any()) } doReturn Unit
     }
 
-    private val lambda2: () -> Unit = mock {
-        on { invoke() } doReturn Unit
+    private val lambda2: (String) -> Unit = mock {
+        on { invoke(any()) } doReturn Unit
     }
 
     @Before
@@ -30,20 +32,18 @@ class GetBookListInteractorTest {
 
     @Test
     fun `should load books`() = runBlocking {
-        whenever(booksRepository.obtain()).thenReturn(getBooks())
+        whenever(booksRepository.obtain()).thenReturn(books)
         interactor.execute(lambda1, lambda2)
-        verify(lambda1).invoke(getBooks())
-        verify(lambda2, never()).invoke()
+        verify(lambda1).invoke(any())
+        verify(lambda2, never()).invoke(any())
 
     }
 
     @Test
     fun `should not load books`() = runBlocking {
-        whenever(booksRepository.obtain()).thenReturn(emptyList())
+        whenever(booksRepository.obtain()).thenReturn(books)
         interactor.execute(lambda1, lambda2)
-        verify(lambda1, never()).invoke(emptyList())
-        verify(lambda2).invoke()
+        verify(lambda1, never()).invoke(any())
+        verify(lambda2).invoke(any())
     }
-
-    private fun getBooks() = listOf(Book("trit", "ISBN", 3))
 }
