@@ -1,5 +1,6 @@
 package com.omniumlab.gotpedia.domain.interactor
 
+import com.omniumlab.gotpedia.domain.entity.Result
 import com.omniumlab.gotpedia.domain.entity.Book
 import com.omniumlab.gotpedia.domain.repository.BooksRepository
 import kotlinx.coroutines.*
@@ -8,15 +9,12 @@ class GetBookListInteractor(private val dispatcher: CoroutineDispatcher, private
 
     fun execute(
         success: (List<Book>) -> Unit,
-        error: () -> Unit
+        error: (String) -> Unit
     ) {
-        val deferred = GlobalScope.async { booksRepository.obtain() }
         GlobalScope.launch(dispatcher) {
-            val books = deferred.await()
-            if (books.isEmpty()) {
-                error()
-            } else {
-                success(books)
+            when (val result = booksRepository.obtain()) {
+                is Result.Success -> success(result.data)
+                is Result.Error -> error(result.errorMessage.toString())
             }
         }
     }
