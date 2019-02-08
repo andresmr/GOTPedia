@@ -3,8 +3,6 @@ package com.omniumlab.gotpedia.ui
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import com.omniumlab.gotpedia.R
 import com.omniumlab.gotpedia.data.RepositoryImpl
 import com.omniumlab.gotpedia.domain.entity.Book
@@ -23,15 +21,16 @@ class BookListView : AppCompatActivity(), BookListPresenter.View {
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
         presenter = BookListPresenter(this, GetBookListInteractor(Dispatchers.Main, RepositoryImpl()))
+        swipeToRefresh.setOnRefreshListener { presenter.loadBooks() }
         presenter.loadBooks()
     }
 
     override fun showLoading() {
-        progressBar.visibility = VISIBLE
+        swipeToRefresh.isRefreshing = true
     }
 
     override fun hideLoading() {
-        progressBar.visibility = GONE
+        swipeToRefresh.isRefreshing = false
     }
 
     override fun showBookList(books: List<Book>) {
