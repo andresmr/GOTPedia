@@ -2,6 +2,7 @@ package com.omniumlab.gotpedia.presenter
 
 import com.nhaarman.mockitokotlin2.*
 import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.entity.HttpError
 import com.omniumlab.gotpedia.domain.interactor.GetBookListInteractor
 import org.junit.Before
 import org.junit.Test
@@ -35,7 +36,7 @@ class BookListPresenterTest {
         presenter.loadBooks()
 
         verify(getBookListInteractor).execute(any(), error.capture())
-        error.lastValue.invoke(any())
+        error.lastValue.invoke(HttpError.UNKNOWN.toString())
 
         verify(view, never()).showBookList(any())
     }

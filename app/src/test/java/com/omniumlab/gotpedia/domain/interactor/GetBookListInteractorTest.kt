@@ -2,6 +2,7 @@ package com.omniumlab.gotpedia.domain.interactor
 
 import com.nhaarman.mockitokotlin2.*
 import com.omniumlab.gotpedia.domain.entity.Book
+import com.omniumlab.gotpedia.domain.entity.HttpError
 import com.omniumlab.gotpedia.domain.entity.Result
 import com.omniumlab.gotpedia.domain.repository.BooksRepository
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +15,9 @@ import org.junit.Test
 class GetBookListInteractorTest {
 
     private val booksRepository: BooksRepository = mock()
-    private val books: Result<List<Book>> = mock()
+    private val book : Book = mock()
+    private val repoSuccess: Result<List<Book>> = Result.Success(listOf(book))
+    private val repoError: Result<List<Book>> = Result.Error(HttpError.UNKNOWN)
     private lateinit var interactor: GetBookListInteractor
 
     private val lambda1: (List<Book>) -> Unit = mock {
@@ -32,7 +35,7 @@ class GetBookListInteractorTest {
 
     @Test
     fun `should load books`() = runBlocking {
-        whenever(booksRepository.obtain()).thenReturn(books)
+        whenever(booksRepository.obtain()).thenReturn(repoSuccess)
         interactor.execute(lambda1, lambda2)
         verify(lambda1).invoke(any())
         verify(lambda2, never()).invoke(any())
@@ -41,7 +44,7 @@ class GetBookListInteractorTest {
 
     @Test
     fun `should not load books`() = runBlocking {
-        whenever(booksRepository.obtain()).thenReturn(books)
+        whenever(booksRepository.obtain()).thenReturn(repoError)
         interactor.execute(lambda1, lambda2)
         verify(lambda1, never()).invoke(any())
         verify(lambda2).invoke(any())
